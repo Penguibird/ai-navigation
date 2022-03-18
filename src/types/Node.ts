@@ -2,7 +2,7 @@ export type nodeId = string
 
 export interface Node {
   geometry: {
-    type: "Point",
+    // type: "Point",
     coordinates: [
       number,
       number
