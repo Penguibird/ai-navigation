@@ -23,7 +23,7 @@ interface RoadProperties  {
   surface: string
 }
 export interface Road {
-  gaometry: {
+  geometry: {
     coordinates: [number,number][]
   }
   properties: Partial<RoadProperties>
