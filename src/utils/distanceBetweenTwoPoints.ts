@@ -1,6 +1,15 @@
-export default ([x1,y1]: [number, number], [x2,y2]: [number, number]) => {
-  const dx = Math.abs(x1-x2)
-  const dy = Math.abs(y1-y2)
-  const d = Math.sqrt(dx*dx + dy*dy);
-  return d;
+export default ([lon1,lat1]: [number, number], [lon2,lat2]: [number, number]) => {
+  const R = 6371e3; // metres
+  const φ1 = lat1 * Math.PI/180; // φ, λ in radians
+  const φ2 = lat2 * Math.PI/180;
+  const Δφ = (lat2-lat1) * Math.PI/180;
+  const Δλ = (lon2-lon1) * Math.PI/180;
+  
+  const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  
+  const d = R * c; // in metres
+  return d
 }
