@@ -1,0 +1,1 @@
+export default <T, S>([a,b]: [T, S]) => [b,a] as [S,T]
