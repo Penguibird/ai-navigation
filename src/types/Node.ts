@@ -1,13 +1,34 @@
-type nodeId = string | number
+export type nodeId = string 
 
 export interface Node {
-  gpsLat: number
-  gpsLong: number
+  geometry: {
+    type: "Point",
+    coordinates: [
+      number,
+      number
+    ]
+  },
   name?: string
-  id: nodeId
+  id: string | `node/${number}`
 }
 
-export interface Path {
-  nodes: [nodeId, nodeId]
-  cost: number
+interface RoadProperties  {
+  '@id': string
+  highway: string
+  lit: string
+  maxspeed: string
+  name: string
+  oneway: string
+  ref: string
+  surface: string
 }
+export interface Road {
+  gaometry: {
+    coordinates: [number,number][]
+  }
+  properties: Partial<RoadProperties>
+  cost: number
+  id: string | `way/${number}`
+}
+
+
