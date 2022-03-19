@@ -13,5 +13,6 @@ const [nodes, roads] = parsed.reduce((acc, feature) => {
   return acc;
 }, [[], []]);
 console.log(parsed.length, roads.length + nodes.length);
+
 writeFileSync('./data/roads.json', JSON.stringify(roads));
 writeFileSync('./data/nodes.json', JSON.stringify(nodes));
