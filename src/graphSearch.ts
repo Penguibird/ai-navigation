@@ -24,32 +24,27 @@ export async function graphSearch(
       // console.log(expl)
       await display(closestMapNodeToLocation(startState).coordinates, 'blue');
       await display(chosenNode.coordinates, 'red');
-      await drawLine(
-        [...chosenNode.parents, chosenNode.id]
-          .map(id => [explored.find(_ => _.id == id)?.roadThatLeadHereIndex])
-          .flat()
-          .filter(notEmpty)
-          .map(roadI => roads[roadI])
-          .filter(notEmpty)
-          .map(road => road.lineString)
-          .flat()
-      );
-      for (const point of chosenNode.parents) {
-        await display(point.split(",").map(n => parseFloat(n)) as [number, number], 'hotpink');
+      const points = [...chosenNode.parents.map(id => explored.find(_ => _.id == id)).flat(), chosenNode]
+      .filter(notEmpty)
+      for (const point of points) {
+        await drawLine(point.roadThatLeadHere?.lineString ?? [])
+        await display(point.coordinates, 'hotpink')
       }
+      
+
       return Promise.resolve(explored);
     }
 
-    await display(chosenNode.coordinates, 'yellow');
+    // await display(chosenNode.coordinates, 'yellow');
 
     explored.push(chosenNode);
     // console.log(chosenNode.parents.length)
+    await (drawLine(chosenNode.roadThatLeadHere?.lineString ?? []))
 
     const newFrontier = expandNode(chosenNode)
       .filter(node => explored.every(_n => _n.id !== node.id) && frontier.every(_node => _node.id !== node.id));
     // console.log(newFrontier)
-    if (newFrontier.length == 0)
-      console.log("AAA")
+
     frontier = [
       ...newFrontier,
       ...frontier
@@ -70,21 +65,24 @@ const isGoalState = (node: Node): boolean => distanceBetweenTwoPoints(node.coord
 const expandNode = (node: Node): Node[] => {
   const stringNodeCoordinates = node.coordinates.join(",");
   const nodes = [] as Node[];
-  const ids = mapTable[stringNodeCoordinates] as number[];
+  // const ids = mapTable[stringNodeCoordinates] as number[];
+
+  const roadsContainingNode = mapTable[stringNodeCoordinates].map(id => roads[id])
+  // const roadsContainingNode = 
+  // roads.filter(road => road.points.map(c => c.join(',')).includes(stringNodeCoordinates))
 
   const finalNodes = [] as Node[];
-  for (const index of ids) {
-    const roadContainingNode = roads[index];
+  for (const road of roadsContainingNode) {
 
-    const points = roadContainingNode.points;
+    const points = road.points;
     finalNodes.push(...points.map(coordinates => ({
       coordinates,
       id: coordinates.join(","),
       parents: [...node.parents, node.id],
-      roadThatLeadHereIndex: index,
+      roadThatLeadHere: road,
     })));
   }
-  // console.log(ids, finalNodes)
+  // console.log(node.coordinates, roadsContainingNode.map(r => r.points), finalNodes.map(n => n.coordinates))
 
   return finalNodes;
 };

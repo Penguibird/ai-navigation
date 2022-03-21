@@ -1,3 +1,5 @@
+import { OutputRoad } from "../OutputRoad"
+
 export type nodeId = string 
 
 export interface Node {
@@ -6,6 +8,7 @@ export interface Node {
   // parentNodeId?: string
   parents: string[]
   roadThatLeadHereIndex?: number
+  roadThatLeadHere?: OutputRoad
 }
 
 export interface RoadProperties  {

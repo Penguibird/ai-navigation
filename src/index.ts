@@ -10,11 +10,13 @@ import { OutputRoad } from "./OutputRoad";
 var contentHtml = readFileSync('./index.html', 'utf8');
 
 export const roads: OutputRoad[] = JSON.parse(readFileSync('./data/unifiedRoadsScotland.json', { encoding: 'utf-8' }));
+export const inRoads: OutputRoad[] = JSON.parse(readFileSync('./data/roadsScotland.json', { encoding: 'utf-8' }));
+console.log(roads.length, inRoads.length, inRoads.length - roads.length)
 export const mapTable: OutputRoad[] = JSON.parse(readFileSync('./data/mapTableScotland.json', { encoding: 'utf-8' }));
 
 
-export const startState = flip([56.39631373586291, -3.731760665035462])
-export const goalState: [number, number] = flip([56.46103099384841, -2.97033770290844]);
+export const startState = flip([55.94918862272607, -3.1979392542783516])
+export const goalState: [number, number] = flip([55.86523859081438, -4.262954920580278]);
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null });
@@ -65,6 +67,10 @@ export const goalState: [number, number] = flip([56.46103099384841, -2.970337702
 
   }
   await graphSearch(draw, drawLine)
+
+  // for (const road of roads) {
+  //   await drawLine(road.lineString)
+  // }
 
   // await browser.close();
 })();

@@ -9,7 +9,7 @@ export const closestMapNodeToLocation = (coords: [number, number]) => {
   let closestNode: Node | null = null;
   for (const road of roads) {
     for (const point of road.points) {
-      const dist = distanceBetweenTwoPoints(point, point);
+      const dist = distanceBetweenTwoPoints(point, coords);
       if (dist < d) {
         d = dist;
         closestNode = {
@@ -20,6 +20,7 @@ export const closestMapNodeToLocation = (coords: [number, number]) => {
       }
     }
   }
+  console.log("Starting node", closestNode, d)
   if (closestNode == null)
     throw new Error("No closest node found");
   return closestNode;
