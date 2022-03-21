@@ -41,12 +41,16 @@ const expandNode = (node: Node): Node[] => {
   const stringNodeCoordinates = node.coordinates.join(",");
   const nodes = [] as Node[];
   const ids = mapTable[stringNodeCoordinates] as number[];
-  const roadsContainingNode = ids.map(i => roads[i])
-  return roadsContainingNode
-    .map(road => road.points)
-    .flat()
-    .map(coordinates => ({
+  const finalNodes = [] as Node[];
+  for (const index of ids) {
+    const roadContainingNode = roads[index]
+    const points = roadContainingNode.points;
+    finalNodes.push(...points.map(coordinates => ({
       coordinates,
-      id: coordinates.join(",")
-    }));
+      id: coordinates.join(","),
+      parentNodeId: node.id,
+      roadThatLeadHereIndex: index,
+    })));
+  }
+  return finalNodes;
 };

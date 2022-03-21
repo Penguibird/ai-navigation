@@ -42,6 +42,8 @@ export const goalState: [number, number] = flip([56.46103099384841, -2.970337702
     }, [x1, x2], svg);
 
   }
+
+  
   await graphSearch(draw)
 
   // await browser.close();

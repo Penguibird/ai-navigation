@@ -6,4 +6,5 @@ export interface OutputRoad {
   points: [number, number][];
   length: number;
   properties: Partial<RoadProperties>;
+  lineString: [number, number][];
 }

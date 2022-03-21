@@ -56,6 +56,7 @@ for (const road of roads) {
       outputRoads.push({
         points: [roadCords[startPoint], roadCords[endPoint]],
         length,
+        lineString: section,
         properties: road.properties,
       });
 

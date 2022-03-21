@@ -3,6 +3,8 @@ export type nodeId = string
 export interface Node {
   coordinates: [number, number]
   id: string
+  parentNodeId?: string
+  roadThatLeadHereIndex?: number
 }
 
 export interface RoadProperties  {
