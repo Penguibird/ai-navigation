@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
 
-const data = readFileSync('./data/roads.geojson', { encoding: 'utf-8' });
+const data = readFileSync('./data/scotlandData.json', { encoding: 'utf-8' });
 const parsed = JSON.parse(data).map((collection: any) => collection.features).flat();
 const [nodes, roads] = parsed.reduce((acc, feature) => {
   if (feature.geometry.type == 'Point')
@@ -13,5 +13,7 @@ const [nodes, roads] = parsed.reduce((acc, feature) => {
   return acc;
 }, [[], []]);
 console.log(parsed.length, roads.length + nodes.length);
-writeFileSync('./data/roads.json', JSON.stringify(roads));
-writeFileSync('./data/nodes.json', JSON.stringify(nodes));
+
+writeFileSync('./data/roadsScotland.json', JSON.stringify(roads));
+writeFileSync('./data/nodesScotland.json', JSON.stringify(nodes));
+
