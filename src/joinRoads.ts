@@ -68,6 +68,25 @@ for (const road of roads) {
       })
 
     }
+  } else {
+    let length = 0;
+    for (let j = 1; j < roadCords.length; j++) {
+      const prevElement = roadCords[j - 1];
+      const element = roadCords[j];
+      length += distanceBetweenTwoPoints(prevElement, element);
+    }
+    outputRoads.push({
+      points: [roadCords[0], roadCords[roadCords.length - 1]],
+      length,
+      lineString: roadCords,
+      properties: road.properties,
+    });
+    [roadCords[0], roadCords[roadCords.length - 1]].forEach(point => {
+      if (!mapTable[point.join(",")])
+        mapTable[point.join(",")] = [outputRoads.length]
+      else
+        mapTable[point.join(",")].push(outputRoads.length)
+    })
   }
 
   // if (outputRoads.length > 1)

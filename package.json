@@ -7,6 +7,7 @@
     "start": "tsc && node dist/index.js",
     "parse": "tsc && node dist/parse.js",
     "join-roads": "tsc && node dist/joinRoads.js",
+    "compute-lookup": "tsc && node dist/computeLookupTable.js",
     "build": "tsc"
   },
   "repository": {
