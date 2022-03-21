@@ -13,14 +13,14 @@ const constraint=(startNode:Node,endNode:Node)=>{
     if (direction==1)
     {
         //first side
-        boundries[0]=[startNode.geometry.coordinates[1],startNode.geometry.coordinates[0]-0.5];
-        boundries[1]=[startNode.geometry.coordinates[1]-0.5,startNode.geometry.coordinates[0]];
-        boundries[2]=[startNode.geometry.coordinates[1],startNode.geometry.coordinates[0]+0.5];
+        boundries[0]=[startNode.coordinates[1],startNode.coordinates[0]-0.5];
+        boundries[1]=[startNode.coordinates[1]-0.5,startNode.coordinates[0]];
+        boundries[2]=[startNode.coordinates[1],startNode.coordinates[0]+0.5];
 
         //second side
-        boundries[3]=[endNode.geometry.coordinates[1],endNode.geometry.coordinates[0]-0.5];
-        boundries[4]=[endNode.geometry.coordinates[1]+0.5,endNode.geometry.coordinates[0]];
-        boundries[5]=[endNode.geometry.coordinates[1],endNode.geometry.coordinates[0]+0.5];
+        boundries[3]=[endNode.coordinates[1],endNode.coordinates[0]-0.5];
+        boundries[4]=[endNode.coordinates[1]+0.5,endNode.coordinates[0]];
+        boundries[5]=[endNode.coordinates[1],endNode.coordinates[0]+0.5];
     }
    
 
@@ -29,27 +29,27 @@ const constraint=(startNode:Node,endNode:Node)=>{
 
 let Direction=(startNode:Node,endNode:Node)=>{
     //north
-    if(startNode.geometry.coordinates[1]<endNode.geometry.coordinates[1]){
+    if(startNode.coordinates[1]<endNode.coordinates[1]){
         //east
-        if(startNode.geometry.coordinates[0]<endNode.geometry.coordinates[0])
+        if(startNode.coordinates[0]<endNode.coordinates[0])
         {
             return 1;
         }
         //west
-        else if(startNode.geometry.coordinates[0]>endNode.geometry.coordinates[0])
+        else if(startNode.coordinates[0]>endNode.coordinates[0])
         {
            return 2;
         }
     }
     //south
-    else if(startNode.geometry.coordinates[1]>endNode.geometry.coordinates[1]){
+    else if(startNode.coordinates[1]>endNode.coordinates[1]){
         //east
-        if(startNode.geometry.coordinates[0]<endNode.geometry.coordinates[0])
+        if(startNode.coordinates[0]<endNode.coordinates[0])
         {
            return 3;
         }
         //west
-        else if(startNode.geometry.coordinates[0]>endNode.geometry.coordinates[0])
+        else if(startNode.coordinates[0]>endNode.coordinates[0])
         {
             return 4;
         }
