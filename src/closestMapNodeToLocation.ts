@@ -13,6 +13,7 @@ export const closestMapNodeToLocation = (coords: [number, number]) => {
       if (dist < d) {
         d = dist;
         closestNode = {
+          parents: [],
           coordinates: point,
           id: point.join(","),
         };

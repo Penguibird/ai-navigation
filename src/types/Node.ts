@@ -3,7 +3,8 @@ export type nodeId = string
 export interface Node {
   coordinates: [number, number]
   id: string
-  parentNodeId?: string
+  // parentNodeId?: string
+  parents: string[]
   roadThatLeadHereIndex?: number
 }
 
