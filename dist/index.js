@@ -28,9 +28,7 @@ const expandNode = (node) => {
     const stringNodeCoordinates = node.geometry.coordinates.join(",");
     const connectingRoads = roads.filter(road => road.geometry.coordinates.some(point => point.join(",") == stringNodeCoordinates));
     // Dirty list of all points in all the roads
-    const points = connectingRoads.map(r => r.geometry.coordinates).flat().map(c => c.join(','));
-    console.log(points);
-    const n = nodes.filter(node => points.includes(node.geometry.coordinates.join(',')));
+    const n = nodes.filter(node => connectingRoads.find(road => road.geometry.coordinates.map(c => c.join(","))));
     return n;
 };
 console.log(nodes.length, expandNode(nodes[0]).length);
