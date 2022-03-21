@@ -1,18 +1,11 @@
 export type nodeId = string 
 
 export interface Node {
-  geometry: {
-    type: "Point",
-    coordinates: [
-      number,
-      number
-    ]
-  },
-  name?: string
-  id: string | `node/${number}`
+  coordinates: [number, number]
+  id: string
 }
 
-interface RoadProperties  {
+export interface RoadProperties  {
   '@id': string
   highway: string
   lit: string
