@@ -64,7 +64,7 @@ const constraint=(startNode:Node,endNode:Node)=>{
         boundries[4]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]-0.5];
         boundries[5]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]+0.5];
     }
-   
+   return constraint;
 
 
 }
