@@ -10,17 +10,59 @@ const constraint=(startNode:Node,endNode:Node)=>{
 
     let boundries=[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
     let direction = Direction(startNode,endNode);
+    //north-east
     if (direction==1)
     {
         //first side
-        boundries[0]=[startNode.coordinates[1],startNode.coordinates[0]-0.5];
-        boundries[1]=[startNode.coordinates[1]-0.5,startNode.coordinates[0]];
-        boundries[2]=[startNode.coordinates[1],startNode.coordinates[0]+0.5];
+        boundries[0]=[startNode.coordinates[0]+0.5,startNode.coordinates[1]-0.5];
+        boundries[1]=[startNode.coordinates[0]-0.5,startNode.coordinates[1]-0.5];
+        boundries[2]=[startNode.coordinates[0]-0.5,startNode.coordinates[1]+0.5];
 
         //second side
-        boundries[3]=[endNode.coordinates[1],endNode.coordinates[0]-0.5];
-        boundries[4]=[endNode.coordinates[1]+0.5,endNode.coordinates[0]];
-        boundries[5]=[endNode.coordinates[1],endNode.coordinates[0]+0.5];
+        boundries[3]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]+0.5];
+        boundries[4]=[endNode.coordinates[0]+0.5,endNode.coordinates[1]+0.5];
+        boundries[5]=[endNode.coordinates[0]+0.5,endNode.coordinates[1]-0.5];
+    }
+    //north-west
+    else if (direction ==2)
+    {
+        //first side
+        boundries[0]=[startNode.coordinates[0]-0.5,startNode.coordinates[1]-0.5];
+        boundries[1]=[startNode.coordinates[0]+0.5,startNode.coordinates[1]-0.5];
+        boundries[2]=[startNode.coordinates[0]+0.5,startNode.coordinates[1]+0.5];
+
+        //second side
+        boundries[3]=[endNode.coordinates[0]+0.5,endNode.coordinates[1]+0.5];
+        boundries[4]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]+0.5];
+        boundries[5]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]-0.5];
+
+    }
+    //south-east
+    else if (direction ==3)
+    {
+        //first side
+        boundries[0]=[startNode.coordinates[0]+0.5,startNode.coordinates[1]+0.5];
+        boundries[1]=[startNode.coordinates[0]-0.5,startNode.coordinates[1]+0.5];
+        boundries[2]=[startNode.coordinates[0]-0.5,startNode.coordinates[1]-0.5];
+
+        //second side
+        boundries[3]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]-0.5];
+        boundries[4]=[endNode.coordinates[0]+0.5,endNode.coordinates[1]-0.5];
+        boundries[5]=[endNode.coordinates[0]+0.5,endNode.coordinates[1]+0.5];
+
+    }
+    //south-west
+    else if (direction ==4)
+    {
+        //first side
+        boundries[0]=[startNode.coordinates[0]-0.5,startNode.coordinates[1]+0.5];
+        boundries[1]=[startNode.coordinates[0]+0.5,startNode.coordinates[1]+0.5];
+        boundries[2]=[startNode.coordinates[0]+0.5,startNode.coordinates[1]-0.5];
+
+        //second side
+        boundries[3]=[endNode.coordinates[0]+0.5,endNode.coordinates[1]-0.5];
+        boundries[4]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]-0.5];
+        boundries[5]=[endNode.coordinates[0]-0.5,endNode.coordinates[1]+0.5];
     }
    
 
