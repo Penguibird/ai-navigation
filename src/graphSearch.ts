@@ -5,6 +5,7 @@ import { closestMapNodeToLocation } from "./closestMapNodeToLocation";
 import waterfall from 'async/waterfall';
 import { notEmpty } from "./utils/notEmpty";
 
+let i = 0;
 export async function graphSearch(
   display: (coords: [number, number], color: string) => Promise<any>,
   drawLine: (lineString: [number, number][]) => Promise<void>
@@ -24,14 +25,16 @@ export async function graphSearch(
       // console.log(expl)
       await display(closestMapNodeToLocation(startState).coordinates, 'blue');
       await display(chosenNode.coordinates, 'red');
-      const points = [...chosenNode.parents.map(id => explored.find(_ => _.id == id)).flat(), chosenNode]
-      .filter(notEmpty)
+      const points = [...chosenNode.parents, chosenNode]
+        .filter(notEmpty)
       for (const point of points) {
         await drawLine(point.roadThatLeadHere?.lineString ?? [])
         await display(point.coordinates, 'hotpink')
       }
-      
-
+      console.log("Number of nodes in final solution", chosenNode.parents.length + 1)
+      console.log("Final cost", pathCost(chosenNode))
+      console.log("Minimal cost", Math.min(...[...pathCostLookupTable.values()].filter(v => v != 0)))
+      console.log("Explored Nodes", i)
       return Promise.resolve(explored);
     }
 
@@ -39,7 +42,8 @@ export async function graphSearch(
 
     explored.push(chosenNode);
     // console.log(chosenNode.parents.length)
-    await (drawLine(chosenNode.roadThatLeadHere?.lineString ?? []))
+    // await (drawLine(chosenNode.roadThatLeadHere?.lineString ?? []))
+    i++;
 
     const newFrontier = expandNode(chosenNode)
       .filter(node => explored.every(_n => _n.id !== node.id) && frontier.every(_node => _node.id !== node.id));
@@ -56,11 +60,42 @@ export async function graphSearch(
   return Promise.resolve("Failure");
 }
 
-const choosingAlgorithm = (nodes: Node[]) => ({ ...(nodes[nodes.length - 1]) });
+const pathCostLookupTable = new Map<Node, number>()
 
-const threshold = 500;
+const pathCost = (node: Node) => {
+  if (pathCostLookupTable.get(node))
+    return pathCostLookupTable.get(node)!
+  else {
+    const cost = [node, ...node.parents].reduce((a, v) => a + (v.roadThatLeadHere?.length ?? 0), 0) ?? Infinity;
+    pathCostLookupTable.set(node, cost)
+    return cost
+  }
+}
 
-const isGoalState = (node: Node): boolean => distanceBetweenTwoPoints(node.coordinates, goalState) < threshold;
+const heuristic = (node: Node) => {
+  return distanceBetweenTwoPoints(node.coordinates, goalState);
+}
+
+const choosingAlgorithm = (nodes: Node[]) => {
+  let chosenNode = null as Node | null;
+  let lowestCost = Infinity;
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    const cost = pathCost(node) + heuristic(node)
+    if (cost < lowestCost) {
+      lowestCost = cost;
+      chosenNode = node;
+    }
+  }
+  if (chosenNode == null)
+    console.log("Cant find a shortest node")
+  return { ...(chosenNode ?? nodes[0]) };
+  // return { ...nodes[0] };
+};
+
+const threshold = 1;
+
+const isGoalState = (node: Node): boolean => distanceBetweenTwoPoints(node.coordinates, goalState) <= 0.01 // < threshold;
 
 const expandNode = (node: Node): Node[] => {
   const stringNodeCoordinates = node.coordinates.join(",");
@@ -78,7 +113,7 @@ const expandNode = (node: Node): Node[] => {
     finalNodes.push(...points.map(coordinates => ({
       coordinates,
       id: coordinates.join(","),
-      parents: [...node.parents, node.id],
+      parents: [...node.parents, node],
       roadThatLeadHere: road,
     })));
   }

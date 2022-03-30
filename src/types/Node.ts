@@ -6,7 +6,7 @@ export interface Node {
   coordinates: [number, number]
   id: string
   // parentNodeId?: string
-  parents: string[]
+  parents: Node[]
   roadThatLeadHereIndex?: number
   roadThatLeadHere?: OutputRoad
 }

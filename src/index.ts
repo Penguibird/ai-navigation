@@ -5,6 +5,7 @@ import { notEmpty } from "./utils/notEmpty";
 import puppeteer from 'puppeteer'
 import { graphSearch } from "./graphSearch";
 import { OutputRoad } from "./OutputRoad";
+import { closestMapNodeToLocation } from "./closestMapNodeToLocation";
 
 
 var contentHtml = readFileSync('./index.html', 'utf8');
@@ -12,11 +13,12 @@ var contentHtml = readFileSync('./index.html', 'utf8');
 export const roads: OutputRoad[] = JSON.parse(readFileSync('./data/unifiedRoadsScotland.json', { encoding: 'utf-8' }));
 export const inRoads: OutputRoad[] = JSON.parse(readFileSync('./data/roadsScotland.json', { encoding: 'utf-8' }));
 console.log(roads.length, inRoads.length, inRoads.length - roads.length)
-export const mapTable: OutputRoad[] = JSON.parse(readFileSync('./data/mapTableScotland.json', { encoding: 'utf-8' }));
+export const mapTable: Record<string, number[]> = JSON.parse(readFileSync('./data/mapTableScotland.json', { encoding: 'utf-8' }));
 
 
 export const startState = flip([55.94918862272607, -3.1979392542783516])
-export const goalState: [number, number] = flip([55.86523859081438, -4.262954920580278]);
+export const goalState: [number, number] = closestMapNodeToLocation(flip([55.86523859081438, -4.262954920580278])).coordinates;
+
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null });
@@ -24,10 +26,10 @@ export const goalState: [number, number] = flip([55.86523859081438, -4.262954920
   await page.setContent(contentHtml)
   const windowHandle = await page.evaluateHandle(() => window);
 
-  const draw = async ([x1, x2]: [number, number], color:string) => {
+  const draw = async ([x1, x2]: [number, number], color: string) => {
     // console.log(x1, x2)
     // windowHandle.draw(x2,x1)
-    await page.evaluate(([x1, x2],  color) => {
+    await page.evaluate(([x1, x2], color) => {
       //@ts-ignore
       // const map = (window.myMap as google.maps.Map);
       // alert("Drawing", x2, x1)
@@ -40,7 +42,7 @@ export const goalState: [number, number] = flip([55.86523859081438, -4.262954920
         //@ts-ignore
         map: window.myMap
       });
-    }, [x1, x2],  color);
+    }, [x1, x2], color);
 
   }
   const drawLine = async (lineString: [number, number][]) => {
@@ -51,18 +53,20 @@ export const goalState: [number, number] = flip([55.86523859081438, -4.262954920
       // alert("Drawing", x2, x1)
       //@ts-ignore
       // if (window.line)
-      //@ts-ignore
-      // (window.line as google.maps.Polyline).setVisible(false);
+        //@ts-ignore
+        // (window.line as google.maps.Polyline).setVisible(false);
       //@ts-ignore
       window.line = new google.maps.Polyline({
-        path: lineString.map(([x1, x2]) => ({lat: x2, lng: x1})),
+        path: lineString.map(([x1, x2]) => ({ lat: x2, lng: x1 })),
         geodesic: true,
         strokeColor: "hotpink",
         strokeOpacity: 1.0,
-        strokeWeight: 2,        
+        strokeWeight: 2,
         //@ts-ignore
         map: window.myMap
       });
+      //@ts-ignore
+      // (window.line as google.maps.Polyline).setVisible(true);
     }, lineString);
 
   }
